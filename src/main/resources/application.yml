@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    initialize: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    database: postgresql
+server:
+  context-path: /multitenancy
+liquibase:
+#  change-log: classpath:/liquibase/changelog-master.xml
+  enabled: false
+ # drop-first: false
+
