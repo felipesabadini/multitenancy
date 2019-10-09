@@ -20,17 +20,20 @@ public class PessoaResource {
         this.repository = repository;
     }
 
-    @PostMapping
-    public ResponseEntity<PessoaEntity> salvar(PessoaEntity pessoa) {
+    @PostMapping("{database}/{schema}")
+    public ResponseEntity<PessoaEntity> salvar(@PathVariable String database, @PathVariable String schema, @RequestBody PessoaEntity pessoa) {
+        TenantThreadLocalStorage.tenanctID.set(database);
+        TenantThreadLocalStorage.SCHEMA_ID.set(schema);
         this.repository.saveAndFlush(pessoa);
         return ResponseEntity
                 .created(URI.create(API_PESSSOAS.concat(pessoa.getId())))
                 .body(pessoa);
     }
 
-    @GetMapping
-    public ResponseEntity<List> recuperarTodos() {
-        TenantThreadLocalStorage.SCHEMA_ID.set("SABADINI");
+    @GetMapping("{database}/{schema}")
+    public ResponseEntity<List> recuperarTodos(@PathVariable String database, @PathVariable String schema) {
+        TenantThreadLocalStorage.tenanctID.set(database);
+        TenantThreadLocalStorage.SCHEMA_ID.set(schema);
         return ResponseEntity.ok(this.repository.findAll());
     }
 

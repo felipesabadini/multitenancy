@@ -1,6 +1,7 @@
 package br.sabadini;
 
 import br.sabadini.configuration.DatabaseConfiguration;
+import br.sabadini.configuration.TenantThreadLocalStorage;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +18,10 @@ public class MultitenancyResource {
         return Boolean.FALSE;
     }
 
-    @GetMapping("/{name}")
-    public Boolean loadDatabaseByName(@PathVariable String name) {
-        DatabaseConfiguration.updateDatabaseByName(name);
+    @GetMapping("/{name}/{schema}")
+    public Boolean loadDatabaseByName(@PathVariable String name, @PathVariable String schema) {
+        TenantThreadLocalStorage.SCHEMA_ID.set(schema);
+        DatabaseConfiguration.updateDatabaseByName(name, schema);
         return Boolean.FALSE;
     }
 }
