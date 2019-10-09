@@ -5,12 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 public class TenantAwareRoutingSource extends AbstractRoutingDataSource {
-    private static final Logger LOG = LoggerFactory.getLogger(TenantAwareRoutingSource.class);
+//    private static final Logger LOG = LoggerFactory.getLogger(TenantAwareRoutingSource.class);
 
 
     @Override
     protected Object determineCurrentLookupKey() {
-        LOG.info("TenantID -> ".concat(TenantThreadLocalStorage.tenanctID.get()));
+//        LOG.info("TenantID -> ".concat(TenantThreadLocalStorage.tenanctID.get()));
         return TenantThreadLocalStorage.tenanctID.get();
     }
 }

@@ -30,7 +30,7 @@ public class DatabaseConfiguration {
         Map<Object,Object> targetDataSources = new HashMap<>();
 
         targetDataSources.put("tenancyone", DatabaseConfiguration.createDatasourceByName("tenancyone"));
-        targetDataSources.put("tenancytwo", DatabaseConfiguration.createDatasourceByName("tenancyone"));
+        targetDataSources.put("tenancytwo", DatabaseConfiguration.createDatasourceByName("tenancytwo"));
         dataSource.setTargetDataSources(targetDataSources);
 
         dataSource.afterPropertiesSet();
@@ -47,7 +47,7 @@ public class DatabaseConfiguration {
         return liquibase;
     }
 
-    public static void updateDatabaseByName(String name) {
+    public static void updateDatabaseByName(String name, String schema) {
         try {
             Connection connection = createDatasourceByName(name).getConnection();
             JdbcConnection jdbcConnection = new JdbcConnection(connection);
@@ -55,8 +55,9 @@ public class DatabaseConfiguration {
             Database correctDatabaseImplementation = DatabaseFactory
                     .getInstance()
                     .findCorrectDatabaseImplementation(jdbcConnection);
-
+            correctDatabaseImplementation.setLiquibaseSchemaName(schema);
             Liquibase liquibase = new Liquibase("liquibase/changelog-master.xml", new ClassLoaderResourceAccessor(), correctDatabaseImplementation);
+
             liquibase.update(new Contexts(), new LabelExpression());
         } catch (SQLException | LiquibaseException e) {
 
@@ -73,21 +74,21 @@ public class DatabaseConfiguration {
         switch (name) {
             case "tenancytwo":
                 props.setProperty("dataSourceClassName", "org.postgresql.ds.PGSimpleDataSource");
-                props.setProperty("dataSource.user", "postgres");
-                props.setProperty("dataSource.password", "senha");
-                props.setProperty("dataSource.databaseName", "tenancytwo");
+                props.setProperty("dataSource.user", "mobiage");
+                props.setProperty("dataSource.password", "77726F981F568BA3348E3BD5F65D6D9F8E618C7C21FBEE2AAEE8656A4E68E437");
+                props.setProperty("dataSource.url", "jdbc:postgresql://127.0.0.1:7779/tenancytwo");
                 break;
             case "tenancythree":
                 props.setProperty("dataSourceClassName", "org.postgresql.ds.PGSimpleDataSource");
-                props.setProperty("dataSource.user", "postgres");
-                props.setProperty("dataSource.password", "senha");
-                props.setProperty("dataSource.databaseName", "tenancythree");
+                props.setProperty("dataSource.user", "mobiage");
+                props.setProperty("dataSource.password", "77726F981F568BA3348E3BD5F65D6D9F8E618C7C21FBEE2AAEE8656A4E68E437");
+                props.setProperty("dataSource.url", "jdbc:postgresql://127.0.0.1:7779/tenancythree");
                 break;
             default:
                 props.setProperty("dataSourceClassName", "org.postgresql.ds.PGSimpleDataSource");
-                props.setProperty("dataSource.user", "postgres");
-                props.setProperty("dataSource.password", "senha");
-                props.setProperty("dataSource.databaseName", "tenancyone");
+                props.setProperty("dataSource.user", "mobiage");
+                props.setProperty("dataSource.password", "77726F981F568BA3348E3BD5F65D6D9F8E618C7C21FBEE2AAEE8656A4E68E437");
+                props.setProperty("dataSource.url", "jdbc:postgresql://127.0.0.1:7779/tenancyone");
                 break;
         }
         return props;
